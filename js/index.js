@@ -10,6 +10,8 @@ const SECOND_PLAYER_TURN_MESSAGE = `It's ${SECOND_PLAYER_MARK}'s turn!`;
 const TIED_MESSAGE = `You tied! Again! (I'm assuming it's "again". It's usually a tie.) Want to play again anyway?`;
 const FIRST_PLAYER_WINS_MESSAGE = `${FIRST_PLAYER_MARK} wins! Play again?`;
 const SECOND_PLAYER_WINS_MESSAGE = `${SECOND_PLAYER_MARK} wins! Play again?`
+const STANDARD_COLOR = 'black';
+const DONE_COLOR = 'red';
 
 // Global state variables.
 let currentMark = FIRST_PLAYER_MARK;
@@ -44,9 +46,10 @@ function init() {
     squares[i].addEventListener('click', clickSquare);
   }
 
-  // Throw our welcome message from above on the page.
+  // Throw our welcome message from above on the page and reset its color.
   // Grabs the #game_message node in the same way as the squares above.
   game_message.innerText = INITIAL_MESSAGE;
+  game_message.style.color = STANDARD_COLOR;
 
   // Same method as above, but places an event listener on the reset button.
   reset.addEventListener('click', resetGame);
@@ -69,9 +72,11 @@ function clickSquare(event) {
     if(someoneWon) {
       gameIsOver = true;
       game_message.innerText = getWinMessage();
+      game_message.style.color = DONE_COLOR;
     } else if (boardIsFilled) {
       game_message.innerText = TIED_MESSAGE;
       gameIsOver = true;
+      game_message.style.color = DONE_COLOR;
     } else {
       game_message.innerText = getTurnMessage();
       currentMark = getNewCurrentMark();
@@ -84,6 +89,7 @@ function resetGame() {
   currentMark = FIRST_PLAYER_MARK;
   gameIsOver = false;
   game_message.innerText = FIRST_PLAYER_TURN_MESSAGE;
+  game_message.style.color = STANDARD_COLOR;
 
   for(let i = 0; i < squares.length; i++) {
     squares[i].innerText = '';
