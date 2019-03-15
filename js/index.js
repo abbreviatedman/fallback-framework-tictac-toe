@@ -4,126 +4,156 @@ let squares = [];
 // Some copy constants:
 const FIRST_PLAYER_MARK = 'X';
 const SECOND_PLAYER_MARK = 'O';
+const INITIAL_MESSAGE = 'Welcome to Tic Tac Toe!';
 const FIRST_PLAYER_TURN_MESSAGE = `It's ${FIRST_PLAYER_MARK}'s turn!`;
 const SECOND_PLAYER_TURN_MESSAGE = `It's ${SECOND_PLAYER_MARK}'s turn!`;
-const TIED_MESSAGE = 'You tied! Again! (Probably.)';
+const TIED_MESSAGE = `You tied! Again! (I'm assuming it's "again". It's usually a tie.) Want to play again anyway?`;
+const FIRST_PLAYER_WINS_MESSAGE = `${FIRST_PLAYER_MARK} wins! Play again?`;
+const SECOND_PLAYER_WINS_MESSAGE = `${SECOND_PLAYER_MARK} wins! Play again?`
 
-// Initial state for easy resets.
-const INITIAL_STATE = {
-    currentMark: 'X',
-    gameStatusMessage: FIRST_PLAYER_TURN_MESSAGE
-  }
+// Global state variables.
+let currentMark = FIRST_PLAYER_MARK;
+let gameIsOver = false;
 
-let {
-    currentMark,
-    gameIsOver,
-    gameStatusMessage
-} = INITIAL_STATE;
-
+// When the page loads, launch our initialization function.
 window.onload = init;
 
 function init() { 
-    squares = [
-        square_0,
-        square_1,
-        square_2,
-        square_3,
-        square_4,
-        square_5,
-        square_6,
-        square_7,
-        square_8
-    ];
+  squares = [
+    square_0,
+    square_1,
+    square_2,
+    square_3,
+    square_4,
+    square_5,
+    square_6,
+    square_7,
+    square_8
+  ];
 
-    for(let i = 0; i < squares.length; i++) {
-        squares[i].addEventListener('click', clickSquare);
-    }
+  for(let i = 0; i < squares.length; i++) {
+    squares[i].addEventListener('click', clickSquare);
+  }
+
+  game_message.innerText = INITIAL_MESSAGE;
+
+  reset.addEventListener('click', resetGame);
 }
 
 function clickSquare(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const square = event.target;
+  const square = event.target;
 
-    if (square.innerText === '') {
-        square.innerText = currentMark;
-        const boardIsFilled = isBoardFilled();
-        const index = parseFloat(square.id.slice(-1));
-        const someoneWon = didSomeoneWin(currentMark, index);
+  if (square.innerText === '' && gameIsOver === false) {
+    square.innerText = currentMark;
+    const boardIsFilled = isBoardFilled();
+    const someoneWon = didSomeoneWin();
 
-        if(someoneWon) {
-            alert(currentMark + ' wins!')
-        } else if (boardIsFilled) {
-            alert(`It's a tie!`);
-        }
-
-        currentMark = currentMark === 'X'
-            ? 'O'
-            : 'X';
+    if(someoneWon) {
+      gameIsOver = true;
+      game_message.innerText = getWinMessage();
+    } else if (boardIsFilled) {
+      game_message.innerText = TIED_MESSAGE;
+      gameIsOver = true;
+    } else {
+      // Get ready for next turn.
+      game_message.innerText = getTurnMessage();
+      currentMark = getNewCurrentMark();
     }
+  }
+}
+
+function resetGame() {
+  currentMark = FIRST_PLAYER_MARK;
+  gameIsOver = false;
+  game_message.innerText = FIRST_PLAYER_TURN_MESSAGE;
+
+  for(let i = 0; i < squares.length; i++) {
+    squares[i].innerText = '';
+  }
+}
+
+function getWinMessage() {
+  return currentMark === FIRST_PLAYER_MARK
+    ? FIRST_PLAYER_WINS_MESSAGE
+    : SECOND_PLAYER_WINS_MESSAGE;
+}
+
+function getTurnMessage() {
+  return currentMark === FIRST_PLAYER_MARK
+    ? SECOND_PLAYER_TURN_MESSAGE
+    : FIRST_PLAYER_TURN_MESSAGE;
+}
+
+function getNewCurrentMark() {
+  return currentMark === FIRST_PLAYER_MARK
+    ? SECOND_PLAYER_MARK
+    : FIRST_PLAYER_MARK;
 }
 
 function isBoardFilled() {
-        for (let i = 0; i < squares.length; i++) {
-            if (squares[i].innerText === '') {
-                return false;
-            }
-        }
-        
-    return true;
+  for (let i = 0; i < squares.length; i++) {
+    if (squares[i].innerText === '') {
+      return false;
+    }
+  }
+  
+  return true;
 }
 
-function didSomeoneWin(mark, index) {
-    const col = index % 3;
-    const board = [];
-    for (let i = 0; i < squares.length; i++) {
-        board.push(squares[i].innerText);
-    }
+function didSomeoneWin() {
+  // Regular Expressions strategy.
+  // Probably not the best regexes.
+  // But getting some practice in.
 
-    const upOneMatches = board[index - 3] === mark;
-    const downOneMatches = board[index + 3] === mark;
-    const leftOneMatches = board[index - 1] === mark
-      && col > 0;
-    const rightOneMatches = board[index + 1] === mark
-      && col < 2;
+  // Build up string based on our board.
+  let marks = '';
+  for (let i = 0; i < squares.length; i++) {
+    const char = squares[i].innerText;
+    marks += char === ''
+      ? ' '
+      : char;
+  }
 
-    const upTwoMatches = board[index - 6] === mark;
-    const downTwoMatches = board[index + 6] === mark;
-    const leftTwoMatches = board[index - 2] === mark
-      && col === 2;
-    const rightTwoMatches = board[index + 2] === mark
-      && col === 0;
+  // Regexes.
+  const firstRow = RegExp(
+    `${currentMark}{3}.{6}`
+  );
+  const secondRow = RegExp(
+    `.{3}${currentMark}{3}.{3}`
+  );
+  const thirdRow = RegExp(
+    `.{6}${currentMark}{3}`
+  );
+  const firstCol = RegExp(
+    `${currentMark}{1}.{2}`.repeat(3)
+  );
+  const secondCol = RegExp(
+    `.{1}${currentMark}{1}.{1}`.repeat(3)
+  );
+  const thirdCol = RegExp(
+    `.{2}${currentMark}{1}`.repeat(3)
+  );
+  const southEastDiag = RegExp(
+    `${currentMark}{1}.{3}${currentMark}{1}.{3}${currentMark}{1}`
+  );
+  const northEastDiag = RegExp(
+    `.{2}${currentMark}{1}.{1}${currentMark}{1}.{1}${currentMark}{1}.{2}`
+  );
 
-    const upOneAndLeftOneMatches = board[index - 4] === mark
-      && (index === 4 || index === 8);
-    const upOneAndRightOneMatches = board[index - 2] === mark
-      && (index === 4 || index === 6);
-    const downOneAndLeftOneMatches = board[index + 2] === mark
-      && (index === 4 || index === 2);
-    const downOneAndRightOneMatches = board[index + 4] === mark
-      && (index === 4 || index === 0);
-    const upTwoAndLeftTwoMatches = board[0] === mark
-      && index === 8;
-    const upTwoAndRightTwoMatches = board[2] === mark
-      && index === 6;
-    const downTwoAndLeftTwoMatches = board[6] === mark
-      && index === 2;
-    const downTwoAndRightTwoMatches = board[8] === mark
-      && index === 0;
+  // Make an array of them.
+  const regularExpressions = [
+    firstRow,
+    secondRow,
+    thirdRow,
+    firstCol,
+    secondCol,
+    thirdCol,
+    southEastDiag,
+    northEastDiag
+  ];
 
-
-    const someoneWon = (upOneMatches && upTwoMatches)
-      || (upOneMatches && downOneMatches)
-      || (downOneMatches && downTwoMatches)
-      || (leftOneMatches && leftTwoMatches)
-      || (leftOneMatches && rightOneMatches)
-      || (rightOneMatches && rightTwoMatches)
-      || (upOneAndLeftOneMatches && upTwoAndLeftTwoMatches)
-      || (upOneAndLeftOneMatches && downOneAndRightOneMatches)
-      || (downOneAndRightOneMatches && downTwoAndRightTwoMatches)
-      || (upOneAndRightOneMatches && upTwoAndRightTwoMatches)
-      || (upOneAndRightOneMatches && downOneAndLeftOneMatches)
-      || (downOneAndLeftOneMatches && downTwoAndLeftTwoMatches);
-
-    return someoneWon;
+  // Return true if any of those regexes match our board.
+  return regularExpressions.some(regularExpression => regularExpression.test(marks));
 }

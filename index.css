@@ -4,6 +4,12 @@
   align-items: center;
 }
 
+#header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 table {
   border-collapse: collapse;
   border-style:hidden;
@@ -26,6 +32,11 @@ td {
   margin: auto;
   text-align: center;
   font-size: 150px;
+}
+
+hr {
+  width: 1000px;
+  margin: 30px;
 }
 
 #game-message {
