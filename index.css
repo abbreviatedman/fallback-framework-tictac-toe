@@ -1,4 +1,4 @@
-.app {
+#container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,7 +9,7 @@ table {
   border-style:hidden;
 }
 
-.about-section {
+#about-section {
   white-space: pre;
 }
 
@@ -17,14 +17,17 @@ td {
   border: 1px solid black;
   width: 200px;
   height: 200px;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
 }
 
 .square {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: auto;
+  text-align: center;
+  font-size: 150px;
 }
 
-.game-message {
+#game-message {
   font-weight: bold;
 }

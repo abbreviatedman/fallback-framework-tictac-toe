@@ -3,41 +3,48 @@
 
   <head>
     <link rel="stylesheet" href="index.css" type="text/css">
-    <script src="https://unpkg.com/vue"></script>
+    <script src="./js/index.js"></script>
   </head>
   <body>
-    <div class="app">
-        <div class="heading">
-          <h1>Tic Tac Toe</h1>
-        </div>
-        <button class="aboutButton" @click="toggleAbout">{{aboutButtonCopy}}</button>
-        <div v-if="showAbout" class="about-section">
-          <span>
-            <p>{{aboutSectionCopy}}</p>
-          </span>
-        </div>
-        <div class="game-message">
-          <p>{{gameMessage}}</p>
-        </div>
-        <div class="reset-button">
-          <button v-if="gameIsOver" @click="resetGame">Play Again</button>
-        </div>
-        <div>
+    <section id="container">
+        <header id="header">
+          <section id="heading">
+            <h1>Tic Tac Toe</h1>
+          <section id="game_message">
+            <p id="game_message_copy"></p>
+          </section>
+        </header>
+        <section>
           <hr>
-        </div>
-      <table>
-        <tr v-for="row in 3">
-          <td v-for="col in 3" @click="handleBoardClick(row - 1, col - 1)">
-            <div class="square">
-              <img :src="getImage(row - 1, col - 1)">
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <script src="./js/appMethods.js"></script>
-    <script src="./js/appData.js"></script>
-    <script src="./js/app.js"></script>
+        </section>
+        <main id="main">
+          <table>
+            <tr id="row_1">
+              <td class="square" id="square_0">
+              </td>
+              <td class="square" id="square_1">
+              </td>
+              <td class="square" id="square_2">
+              </td>
+            </tr>
+            <tr id="row_2">
+              <td class="square" id="square_3">
+              </td>
+              <td class="square" id="square_4">
+              </td>
+              <td class="square" id="square_5">
+              </td>
+            </tr>
+            <tr id="row_3">
+              <td class="square" id="square_6">
+              </td>
+              <td class="square" id="square_7">
+              </td>
+              <td class="square" id="square_8">
+              </td>
+            </tr>
+          </table>
+        </main>
+    </section>
   </body>
 </html>
