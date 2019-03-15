@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+  <head>
+    <link rel="stylesheet" href="index.css" type="text/css">
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div class="app">
+        <div class="heading">
+          <h1>Tic Tac Toe</h1>
+        </div>
+        <button class="aboutButton" @click="toggleAbout">{{aboutButtonCopy}}</button>
+        <div v-if="showAbout" class="about-section">
+          <span>
+            <p>{{aboutSectionCopy}}</p>
+          </span>
+        </div>
+        <div class="game-message">
+          <p>{{gameMessage}}</p>
+        </div>
+        <div class="reset-button">
+          <button v-if="gameIsOver" @click="resetGame">Play Again</button>
+        </div>
+        <div>
+          <hr>
+        </div>
+      <table>
+        <tr v-for="row in 3">
+          <td v-for="col in 3" @click="handleBoardClick(row - 1, col - 1)">
+            <div class="square">
+              <img :src="getImage(row - 1, col - 1)">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="./js/appMethods.js"></script>
+    <script src="./js/appData.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>

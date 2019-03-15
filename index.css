@@ -1,0 +1,30 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table {
+  border-collapse: collapse;
+  border-style:hidden;
+}
+
+.about-section {
+  white-space: pre;
+}
+
+td {
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+}
+
+.square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-message {
+  font-weight: bold;
+}
