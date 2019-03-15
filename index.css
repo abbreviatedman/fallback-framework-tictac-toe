@@ -12,7 +12,7 @@
 
 table {
   border-collapse: collapse;
-  border-style:hidden;
+  border-style: hidden;
 }
 
 #about-section {
@@ -23,15 +23,12 @@ td {
   border: 1px solid black;
   width: 200px;
   height: 200px;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
 }
 
 .square {
   margin: auto;
   text-align: center;
-  font-size: 150px;
+  font-size: 120px;
 }
 
 hr {
