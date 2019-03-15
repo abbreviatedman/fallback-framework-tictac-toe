@@ -19,6 +19,14 @@ let gameIsOver = false;
 window.onload = init;
 
 function init() { 
+  // Add each of the HTML nodes to an array.
+  // This is done using the weird fallback behavior a student of mine found
+  // accidentally. Essentially, if there's no variable anywhere up the scope, 
+  // browsers will look for a matching id on an html node and use that node as a
+  //  sort of mega-global variable.
+  // Calling this the Fallback Framework for wont of a better term.
+  // Other names include:
+  // global node id variables
   squares = [
     square_0,
     square_1,
@@ -31,20 +39,28 @@ function init() {
     square_8
   ];
 
+  // Put an event listener on each of the squares in the array above.
   for(let i = 0; i < squares.length; i++) {
     squares[i].addEventListener('click', clickSquare);
   }
 
+  // Throw our welcome message from above on the page.
+  // Grabs the #game_message node in the same way as the squares above.
   game_message.innerText = INITIAL_MESSAGE;
 
+  // Same method as above, but places an event listener on the reset button.
   reset.addEventListener('click', resetGame);
 }
 
+// Handle a click on any square.
 function clickSquare(event) {
   event.preventDefault();
 
+  // Grab the node the old fashioned way, by identifying where the event
+  // originated.
   const square = event.target;
 
+  // If we're not done or clicking on an already-played square..
   if (square.innerText === '' && gameIsOver === false) {
     square.innerText = currentMark;
     const boardIsFilled = isBoardFilled();
@@ -57,13 +73,13 @@ function clickSquare(event) {
       game_message.innerText = TIED_MESSAGE;
       gameIsOver = true;
     } else {
-      // Get ready for next turn.
       game_message.innerText = getTurnMessage();
       currentMark = getNewCurrentMark();
     }
   }
 }
 
+// Reset everything.
 function resetGame() {
   currentMark = FIRST_PLAYER_MARK;
   gameIsOver = false;
@@ -74,24 +90,28 @@ function resetGame() {
   }
 }
 
+// Who just won?
 function getWinMessage() {
   return currentMark === FIRST_PLAYER_MARK
     ? FIRST_PLAYER_WINS_MESSAGE
     : SECOND_PLAYER_WINS_MESSAGE;
 }
 
+// Whose turn is it next?
 function getTurnMessage() {
   return currentMark === FIRST_PLAYER_MARK
     ? SECOND_PLAYER_TURN_MESSAGE
     : FIRST_PLAYER_TURN_MESSAGE;
 }
 
+// What mark should be next?
 function getNewCurrentMark() {
   return currentMark === FIRST_PLAYER_MARK
     ? SECOND_PLAYER_MARK
     : FIRST_PLAYER_MARK;
 }
 
+// Tests whether the board is filled.
 function isBoardFilled() {
   for (let i = 0; i < squares.length; i++) {
     if (squares[i].innerText === '') {
